@@ -6,6 +6,7 @@ Vagrant.configure("2") do |config|
     mongos1.vm.hostname = "mongos1"
     mongos1.vm.provision :shell, path: "bash/bootstrap_avahi.sh", run: "always"
     mongos1.vm.provision :shell, path: "bash/install_ansible.sh", run: "always"
+    mongos1.vm.synced_folder "MongoDBCluster/", "/home/vagrant/ansible"
   end
   
   config.vm.define "mongos2" do |mongos2|
@@ -14,6 +15,7 @@ Vagrant.configure("2") do |config|
     mongos2.vm.hostname = "mongos2"
     mongos2.vm.provision :shell, path: "bash/bootstrap_avahi.sh", run: "always"
     mongos2.vm.provision :shell, path: "bash/install_ansible.sh", run: "always"
+    mongos2.vm.synced_folder "MongoDBCluster/", "/home/vagrant/ansible"
   end
   
   config.vm.define "mongos3" do |mongos3|
@@ -22,6 +24,7 @@ Vagrant.configure("2") do |config|
     mongos3.vm.hostname = "mongos3"
     mongos3.vm.provision :shell, path: "bash/bootstrap_avahi.sh", run: "always"
     mongos3.vm.provision :shell, path: "bash/install_ansible.sh", run: "always"
+    mongos3.vm.synced_folder "MongoDBCluster/", "/home/vagrant/ansible"
   end  
 
   config.vm.define "mongod1" do |mongod1|
