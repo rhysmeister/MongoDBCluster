@@ -26,4 +26,7 @@ vagrant status;
 	VM, run `vagrant status NAME`.
 
 # Ansible Playbook
-TBD
+
+# Role created with;
+ansible-galaxy init MongoDBCluster;
+
