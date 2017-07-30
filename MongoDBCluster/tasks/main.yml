@@ -1,2 +1,12 @@
 ---
 # tasks file for MongoDBCluster
+- hosts: [mongo_all]
+  become: yes
+  tasks:
+  - name: Add repository
+    yum_repository:
+      name: mongodb-org-3.4
+      description: Official MongoDB 3.4 yum repo
+      baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
+      gpgcheck: 1
+      gpgkey: https://www.mongodb.org/static/pgp/server-3.4.asc 
