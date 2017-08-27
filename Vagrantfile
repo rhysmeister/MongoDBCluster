@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
         mongod_node.vm.provision :ansible do |ansible|
         ansible.groups = {
           "mongos" => ["mongos1","mongos2","mongos3"],
-          "mongod" => ["mongod1","mongod2","mongod3","mongod4","mongod5""mongod6"],
+          "mongod" => ["mongod1","mongod2","mongod3","mongod4","mongod5","mongod6"],
           "mongod_shard0" => ["mongod1","mongod2","mongod3"],
           "mongod_shard1" => ["mongod4","mongod5","mongod6"],
           "mongo_all:children" => ["mongos", "mongod"]

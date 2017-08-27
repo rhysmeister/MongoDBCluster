@@ -25,4 +25,50 @@
              "mongodb-org-tools"]
       enablerepo: "mongodb-org-3.4"
       state: "installed"
-    when: ansible_hostname in groups['mongod']  
+    when: ansible_hostname in groups['mongod']
+
+  - name: Ensure files and directories are owned by mongod
+    file:
+      path: ["/var/log/mongodb/", "/var/lib/mongo", "/var/run/mongodb/mongod.pid"]
+      owner: "mongod"
+      group: "mongod"
+      recurse: "yes"
+
+  - name: Copy mongod config file to hosts
+    template:
+      src: "../templates/mongod.conf"
+      dest: "/etc/mongod.conf"
+      backup: "yes"
+      owner: "mongod"
+      group: "mongod"
+      mode: 0644
+    when: ansible_hostname in item['members'] | regex_replace("\\.local", "") and ansible_hostname in groups['mongod']
+    with_items: "{{ mongodb_shards }}"
+
+  - name: Ensure mongod service is running
+    service:
+      name: "mongod"
+      state: "started"
+
+  - name: Copy Shard Setup Script to lead node of each shard
+    copy:
+      content: |
+         var done = false;
+         rs.initiate();
+         while(rs.status()['myState'] != 1) {
+              print("State is not yet PRIMARY. Waiting...");
+              sleep(10000);
+         }
+         rs.add("{{ item['members'][1] }}:27017");
+         rs.add("{{ item['members'][2] }}:27017");
+      dest: /home/vagrant/sharding.js
+    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongod']
+    with_items: "{{ mongodb_shards }}"
+
+  - name: Execute Shard Setup Script on each lead node_name
+    command: mongo /home/vagrant/sharding.js
+    args:
+      creates: /home/vagrant/sharding.success
+    register: sharding
+    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongod']
+    with_items: "{{ mongodb_shards }}"
