@@ -6,3 +6,23 @@
       baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
       gpgcheck: 1
       gpgkey: https://www.mongodb.org/static/pgp/server-3.4.asc
+
+  - name: Install MongoDB packages on the mongos servers
+    yum:
+      name: ["mongodb-org",
+             "mongodb-org-mongos",
+             "mongodb-org-server",
+             "mongodb-org-shell",
+             "mongodb-org-tools"]
+      enablerepo: "mongodb-org-3.4"
+      state: "installed"
+    when: ansible_hostname in groups['mongos']
+
+  - name: Install MongoDB packages on the shard servers
+    yum:
+      name: ["mongodb-org-server",
+             "mongodb-org-shell",
+             "mongodb-org-tools"]
+      enablerepo: "mongodb-org-3.4"
+      state: "installed"
+    when: ansible_hostname in groups['mongod']  
