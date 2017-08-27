@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
       mongod_node.vm.network "private_network", ip: "192.168.43.#{200 + mongod}"
       mongod_node.vm.hostname = "mongod1"
       mongod_node.vm.provision :shell, path: "bash/bootstrap_avahi.sh", run: "always"
-      if mongod_node == MONGOD_HOSTS
+      if mongod == MONGOD_HOSTS
         mongod_node.vm.provision :ansible do |ansible|
         ansible.limit = "all" # Connect to all machines
         ansible.playbook = "mongodb.yaml"

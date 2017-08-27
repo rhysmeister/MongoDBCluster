@@ -2,13 +2,6 @@
 # vars file for MongoDBCluster
   mongodb_admin_user: "admin"
   mongodb_admin_user_password: "QwDnFv4SGFP2XL4n"
-  mongodb_shards: [ {"shard_name": "shard0", 
- 		     "members": [ "mongod1.local",
- 			          "mongod2.local",
-			          "mongod3.local" ] },
-		    { "shard_name": "shard1",
-		      "members": [ "mongod4.local",
-                                   "mongod5.local",
-                                   "mongod6.local" ] } ]
+  mongodb_shards: [ {"shard_name": "shard0", "members": [ "mongod1.local", "mongod2.local", "mongod3.local" ] }, { "shard_name": "shard1", "members": [ "mongod4.local", "mongod5.local", "mongod6.local" ] } ]
   mongodb_mongos_servers: [ "mongos1.local", "mongos2.local", "mongos3.local" ]
   mongodb_config_servers: mongodb_mongos_servers
