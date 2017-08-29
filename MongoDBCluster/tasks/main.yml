@@ -50,10 +50,14 @@
       name: "mongod"
       state: "started"
 
+  - name: Give mongod daemon a little time
+    pause:
+      seconds: 30
+
+    # TODO Replace with template?
   - name: Copy Shard Setup Script to lead node of each shard
     copy:
       content: |
-         var done = false;
          rs.initiate();
          while(rs.status()['myState'] != 1) {
               print("State is not yet PRIMARY. Waiting...");
@@ -61,6 +65,14 @@
          }
          rs.add("{{ item['members'][1] }}:27017");
          rs.add("{{ item['members'][2] }}:27017");
+         sleep(10000);
+         var doc = rs.status();
+         if(doc['members'].length == 3) {
+            quit(0);
+         }
+         else {
+            quit(1);
+         }
       dest: /home/vagrant/sharding.js
     when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongod']
     with_items: "{{ mongodb_shards }}"
