@@ -6,6 +6,10 @@ Vagrant.configure("2") do |config|
       mongos_node.vm.box = "centos/7"
       mongos_node.vm.network "private_network", ip: "192.168.43.#{100 + mongos}"
       mongos_node.vm.hostname = node_name
+      mongos_node.vm.provider :virtualbox do |vbox|
+        vbox.linked_clone = true
+        vbox.name = node_name
+      end
       mongos_node.vm.provision :shell, path: "bash/bootstrap_avahi.sh", run: "always"
       mongos_node.vm.provision :shell, path: "bash/install_ansible.sh", run: "always"
       mongos_node.vm.synced_folder "MongoDBCluster/", "/home/vagrant/ansible"
@@ -18,6 +22,10 @@ Vagrant.configure("2") do |config|
       mongod_node.vm.box = "centos/7"
       mongod_node.vm.network "private_network", ip: "192.168.43.#{200 + mongod}"
       mongod_node.vm.hostname = node_name
+      mongod_node.vm.provider :virtualbox do |vbox|
+        vbox.linked_clone = true
+        vbox.name = node_name
+      end
       mongod_node.vm.provision :shell, path: "bash/bootstrap_avahi.sh", run: "always"
       if mongod == MONGOD_HOSTS
         mongod_node.vm.provision :ansible do |ansible|
