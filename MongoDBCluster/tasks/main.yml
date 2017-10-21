@@ -68,7 +68,7 @@
     with_items: "{{ mongodb_shards }}"
 
   - name: Execute Shard Setup Script on each lead node_name
-    command: mongo /home/vagrant/sharding.js
+    shell: mongo /home/vagrant/sharding.js && touch /home/vagrant/sharding.success
     args:
       creates: /home/vagrant/sharding.success
     register: sharding
