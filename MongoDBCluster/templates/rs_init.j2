@@ -1,0 +1,15 @@
+rs.initiate();
+while(rs.status()['myState'] != 1) {
+     print("State is not yet PRIMARY. Waiting...");
+     sleep(10000);
+}
+rs.add("{{ item['members'][1] }}:27017");
+rs.add("{{ item['members'][2] }}:27017");
+sleep(10000);
+var doc = rs.status();
+if(doc['members'].length == 3) {
+   quit(0);
+}
+else {
+   quit(1);
+}
