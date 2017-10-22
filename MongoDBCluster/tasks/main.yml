@@ -59,17 +59,32 @@
     pause:
       seconds: 30
 
-  - name: Copy Shard Setup Script to lead node of each shard
+  - name: Copy RS Setup Script to lead node of each shard
     template:
       src: templates/rs_init.j2
-      dest: /home/vagrant/sharding.js
+      dest: /home/vagrant/rs.js
     when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongod']
     with_items: "{{ mongodb_shards }}"
 
-  - name: Execute Shard Setup Script on each lead node_name
+  - name: Execute rs Setup Script on each lead node_name
+    shell: mongo /home/vagrant/rs.js && touch /home/vagrant/rs.success
+    args:
+      creates: /home/vagrant/rs.success
+    register: rs
+    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongod']
+    with_items: "{{ mongodb_shards }}"
+
+  - name: Copy sharding script to a mongos instance
+    template:
+      src: templates/sharding.j2
+      dest: /home/vagrant/sharding.js
+    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongos']
+    with_items: "{{ mongodb_shards }}"
+
+  - name: Execute sharding setup
     shell: mongo /home/vagrant/sharding.js && touch /home/vagrant/sharding.success
     args:
       creates: /home/vagrant/sharding.success
     register: sharding
-    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongod']
-    with_items: "{{ mongodb_shards }}"
+    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongos']
+    with_items: "{{ mongodb_shards }}"  
