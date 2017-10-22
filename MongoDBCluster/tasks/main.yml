@@ -34,11 +34,10 @@
       group: "mongod"
       recurse: "yes"
 
-  - name: Add hostname.local to /etc/hosts
-    lineinfile:
-      path: "/etc/hosts"
-      regexp: "^127.0.0.1 {{ansible_hostname}}.local"
-      line: "127.0.0.1 {{ansible_hostname}}.local"
+  - name: Generate /etc/hosts file
+    template:
+      src: templates/hosts.j2
+      dest: /etc/hosts
 
   - name: Copy mongod config file to hosts
     template:
