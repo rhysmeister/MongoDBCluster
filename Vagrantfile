@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
       end
       mongos_node.vm.provision :shell, path: "bash/bootstrap_avahi.sh", run: "always"
       mongos_node.vm.provision :shell, path: "bash/install_ansible.sh", run: "always"
-      mongos_node.vm.synced_folder "MongoDBCluster/", "/home/vagrant/ansible"
+      #mongos_node.vm.synced_folder "MongoDBCluster/", "/home/vagrant/ansible"
     end
   end
   MONGOD_HOSTS=6
