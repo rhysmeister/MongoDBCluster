@@ -54,6 +54,14 @@
     service:
       name: "mongod"
       state: "started"
+      enabled: yes
+
+  - name: Ensure mongos service is running
+    service:
+      name: "mongos"
+      state: "started"
+      enabled: yes
+    when: ansible_hostname in groups['mongos']
 
   - name: Give mongod daemon a little time
     pause:
