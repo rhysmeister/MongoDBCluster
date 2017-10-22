@@ -78,7 +78,7 @@
     template:
       src: templates/sharding.j2
       dest: /home/vagrant/sharding.js
-    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongos']
+    when: ansible_hostname == "mongos1"
     with_items: "{{ mongodb_shards }}"
 
   - name: Execute sharding setup
@@ -86,5 +86,5 @@
     args:
       creates: /home/vagrant/sharding.success
     register: sharding
-    when: ansible_hostname == item['members'][0] | regex_replace("\\.local", "") and ansible_hostname in groups['mongos']
-    with_items: "{{ mongodb_shards }}"  
+    when: ansible_hostname == "mongos1"
+    with_items: "{{ mongodb_shards }}"

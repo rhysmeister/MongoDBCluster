@@ -1,5 +1,5 @@
-# Ansible managed
-sh.addShard( "rs0/{{ item['members'][1] }}:27017" );
-sh.addShard( "rs1/{{ item['members'][4] }}:27017" );
+// Ansible managed TDO Variable changes
+sh.addShard( "rs0/mongodb1.local:27017" );
+sh.addShard( "rs1/mongodb4.local:27017" );
 sh.enableSharding("test");
 sh.shardCollection("test.sample_messages", { "t_u": 1 } );
