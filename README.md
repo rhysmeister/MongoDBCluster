@@ -30,3 +30,4 @@ vagrant status;
 # Role created with;
 ansible-galaxy init MongoDBCluster;
 
+Archived. see here for the future: https://github.com/rhysmeister/AutomatingMongoDBWithAnsible
